@@ -3,14 +3,11 @@
 <head>
 	<title>Survey Page</title>
 
-	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  	<script src="https://code.jquery.com/jquery.js"></script>
-
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="public/style.css">
+</head>
+<body>
+<div class="container-fluid">
 
 </head>
 <body>
@@ -161,7 +158,12 @@
 			</select>
 			<br>
 <!-- submit button-->
-			<button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+			<div>
+				<input type="submit" class="btn btn-primary btn-lg btn-block" value="Request Friend" id="submit">
+
+			</div>
+
+			<!-- <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> -->
 			<hr>
 
 <!-- footer-->		
@@ -169,7 +171,7 @@
 	 <footer class="footer">
 	 	<div class="container">
 	 		<p>
-	 		<a href="/api/friends"> API Friends Link</a> | <a href="https://github.com/tbikhram/FriendFinder">GitHub Repo</a>
+	 		<a href="/api/friends"> API Friends List</a> | <a href="https://github.com/tbikhram/FriendFinder">GitHub Repo</a>
 	 			
 	 		</p>
 	 		
@@ -185,21 +187,99 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h2 class="modal-title">Best Match</h2>
+					<h2 class="modal-title">My Match</h2>
 					
 				</div>
 
 				<div class="modal-body">
 					<h2 id="myFriendName"></h2>
-					<img id="bestFriendImg" src="https://scontent-dfw1-1.xx.fbcdn.net/t31.0-8/13116244_10107568960519320_7024834722285826624_o.jpg" onError="this.src='https://answers.atlassian.com/images/icons/profilepics/default.png'" width=500px alt="Best Friend">
-					
-				</div>
-				
+					<img id="myFriendImg" src="https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiB6Nne-rvRAhVjjVQKHV4UDH4QjRwIBw&url=http%3A%2F%2Fwww.car.com%2F&psig=AFQjCNHwZwD9II0m5COJDsyFkYRQQ53dvg&ust=1484288244587228" width=500px alt="My Friend">
 			</div>
-			
 		</div>
-	
+					
+	</div>
+				
 </div>
+	
+	
+
+
+<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+
+//capture options
+
+	$("#submit").on("click",function(){
+
+//Validation form
+	function validationForm(){
+		var isValid = true;
+		$(".form-control").each(function(){
+			if($(this).val()=== "")
+				isValid = false;
+
+		});
+		$(".chosen-select").each(function(){
+
+			if($(this).val()==="")
+				isValid = false;
+		})
+		return isValid;
+	}
+
+// if required  fields are filled
+		if(validationForm()== true){
+//createing an object for the user's data
+
+		var userData = {
+			name: $("#name").val(),
+			photo: $("photo").val(),
+			scores: [$("question1").val(), $("question2").val(),$("question3").val(),$("question4").val(), $("question5").val(), $("question6").val(), $("question7").val(), $("question8").val(), $("question9").val(), $("question10").val(), ]
+		}
+// now we can grab the URL of the website 
+		var currentURL = window.location.origin;
+
+		//the AJAX post the data to the friends api
+		$.post(currentURL + "/api/friends", userData, function(data){
+
+			$("#matchName").text(data.name);
+			$("#matchImg").attr("src", data.photo);
+			//show the modal with best match
+			$("#resultsModal").modal("toggle");
+		});
+
+		} else{
+			alert ("please fill out all information")
+		}
+		return false;
+
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+	
 
 
 </body>
