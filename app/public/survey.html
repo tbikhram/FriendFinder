@@ -216,48 +216,73 @@
 	$("#submit").on("click",function(){
 
 //Validation form
-	function validationForm(){
-		var isValid = true;
-		$(".form-control").each(function(){
-			if($(this).val()=== "")
-				isValid = false;
-
-		});
-		$(".chosen-select").each(function(){
-
-			if($(this).val()==="")
-				isValid = false;
-		})
-		return isValid;
-	}
-
-// if required  fields are filled
-		if(validationForm()== true){
-//createing an object for the user's data
-
-		var userData = {
-			name: $("#name").val(),
-			photo: $("photo").val(),
-			scores: [$("question1").val(), $("question2").val(),$("question3").val(),$("question4").val(), $("question5").val(), $("question6").val(), $("question7").val(), $("question8").val(), $("question9").val(), $("question10").val(), ]
+//where the user information is getting pulled		
+		var usrInput = {
+			name: $("#name").val.trim(),
+			photo: $("#photo").val().trim(),
+			scores: [$("#question01").val().trim(), $("#question02").val().trim(), $("#question03").val().trim(), $("#question04").val().trim(), $("#question05").val().trim(), $("#question06").val().trim(), $("#question07").val().trim(), $("#question08").val().trim(), $("#question09").val().trim(), $("#question10").val().trim()]
 		}
-// now we can grab the URL of the website 
+
 		var currentURL = window.location.origin;
+//post the name img and showing the modal
+		$.post(currentURL + "/api/friends", userInput, function(data){
 
-		//the AJAX post the data to the friends api
-		$.post(currentURL + "/api/friends", userData, function(data){
+			$("#myFriendName").text(data.name);
+			$("#myFriendImg").attr("src", data.photo);
 
-			$("#matchName").text(data.name);
-			$("#matchImg").attr("src", data.photo);
-			//show the modal with best match
-			$("#resultsModal").modal("toggle");
+			$("#myFriendModal").modal("show");
 		});
 
-		} else{
-			alert ("please fill out all information")
-		}
 		return false;
 
 	});
+
+
+
+
+
+	// function validationForm(){
+	// 	var isValid = true;
+	// 	$(".form-control").each(function(){
+	// 		if($(this).val()=== "")
+	// 			isValid = false;
+
+	// 	});
+	// 	$(".chosen-select").each(function(){
+
+	// 		if($(this).val()==="")
+	// 			isValid = false;
+	// 	})
+	// 	return isValid;
+	// }
+
+// if required  fields are filled
+		// if(validationForm()== true){
+//createing an object for the user's data
+
+		// var userData = {
+		// 	name: $("#name").val(),
+		// 	photo: $("photo").val(),
+		// 	scores: [$("question1").val(), $("question2").val(),$("question3").val(),$("question4").val(), $("question5").val(), $("question6").val(), $("question7").val(), $("question8").val(), $("question9").val(), $("question10").val(), ]
+		// }
+// now we can grab the URL of the website 
+	// 	var currentURL = window.location.origin;
+
+	// 	//the AJAX post the data to the friends api
+	// 	$.post(currentURL + "/api/friends", userData, function(data){
+
+	// 		$("#matchName").text(data.name);
+	// 		$("#matchImg").attr("src", data.photo);
+	// 		//show the modal with best match
+	// 		$("#resultsModal").modal("toggle");
+	// 	});
+
+	// 	} else{
+	// 		alert ("please fill out all information")
+	// 	}
+	// 	return false;
+
+	// });
 
 
 
